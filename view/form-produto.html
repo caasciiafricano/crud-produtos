@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/14d67b7e07.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">MyProdutos</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                    aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sobre-nós</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contactos</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Acções
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="form-produto.html">Novo Produto</a></li>
+                                <li><a class="dropdown-item" href="../index.html">Listar Produtos</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Histórico de Produtos</a></li>
+                                <li><a class="dropdown-item" href="#">Configurações</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="d-flex justify-content-center mt-5 py-4">
+        <form class="px-5" action="../model/cadastrar-produto.php" method="POST" id="form-cadastrar-produto">
+            <div class="mb-3" hidden>
+                <label for="txt_id_produto" class="form-label">ID</label>
+                <input type="number" class="form-control" name="txt_id_produto" id="txt_id_produto" value="0" required>
+                <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="mb-3">
+                <label for="txt_nome_produto" class="form-label">Nome Produto</label>
+                <input type="text" class="form-control" name="txt_nome_produto" id="txt_nome_produto" required>
+                <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="mb-3">
+                <label for="txt_quantidade_produto" class="form-label">Quantidade</label>
+                <input type="number" class="form-control" name="txt_quantidade_produto" id="txt_quantidade_produto"
+                    value="1" required>
+                <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="mb-3">
+                <label for="txt_descricao_produto" class="form-label">Descrição do Produto</label>
+                <textarea class="form-control" name="txt_descricao_produto" id="txt_descricao_produto" cols="30"
+                    rows="4"></textarea>
+                <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="mb-3">
+                <label for="file_imagem1_produto" class="form-label">Imagem 1</label>
+                <input type="file" class="form-control" id="file_imagem1_produto" value="1"
+                    accept="image/png,image/jpeg" name="file_imagem1_produto" required>
+                <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="mb-3">
+                <label for="file_imagem2_produto" class="form-label">Imagem 2</label>
+                <input type="file" class="form-control" id="file_imagem2_produto" value="1"
+                    accept="image/png,image/jpeg" name="file_imagem2_produto" required>
+                <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="mb-3">
+                <label for="file_imagem3_produto" class="form-label">Imagem 3</label>
+                <input type="file" class="form-control" id="file_imagem3_produto" value="1"
+                    accept="image/png,image/jpeg" name="file_imagem3_produto" required>
+                <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="text-end">
+                <button class="btn btn-success btn-lg" type="submit" id="btn_enviar_produto">
+                    <span class="spinner-border spinner-border-sm d-none" aria-hidden="true"
+                        id="btn_enviar_efeito_loading"></span>
+                    <span role="status">Cadastrar</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#form-cadastrar-produto").submit(function (event) {
+                event.preventDefault()
+
+                const cmd = $("#btn_enviar_produto")
+                const efeito = $("#btn_enviar_efeito_loading")
+                cmd.prop("disabled", true)
+                efeito.removeClass("d-none")
+
+                var formData = new FormData(this)
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: $(this).attr("method"),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        setTimeout(function () {
+                            window.alert(res)
+                            cmd.removeAttr("disabled")
+                            efeito.addClass("d-none")
+                        }, 1000)
+                    },
+                    error: function (res) {
+                        setTimeout(function () {
+                            window.alert("Falha ao carregar dados para o servidor")
+                            cmd.removeAttr("disabled")
+                            efeito.addClass("d-none")
+                        }, 1000)
+                    },
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>
